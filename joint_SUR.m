@@ -135,7 +135,7 @@ for it = id
 
             switch config.critName
                 case "m"
-                    crit_tab(i) = sum(IS.*min(proba, 1-proba),'all');
+                    crit_tab(i) = weight*mean(IS.*min(proba, 1-proba), 3);
                 case "v"
                     crit_tab(i) = weight*mean(IS.*(proba.*(1-proba)), 3);
                 case "e"
