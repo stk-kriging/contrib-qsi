@@ -135,17 +135,18 @@ for it = id
 
             switch config.critName
                 case "m"
-                    crit_tab(i) = weight*mean(IS.*min(proba, 1-proba), 3);
+                    s = min (proba, 1 - proba);
                 case "v"
-                    crit_tab(i) = weight*mean(IS.*(proba.*(1-proba)), 3);
+                    s = proba .* (1 - proba);
                 case "e"
-                    s1 = tools.nan2zero(-proba.*log2(proba));
-                    s2 = tools.nan2zero(-(1-proba).*log2(1-proba));
-                    crit_tab(i) = weight*mean(IS.*(s1+s2), 3);
+                    qroba = 1 - proba;
+                    s = tools.nan2zero (-proba .* log2(proba)) ...
+                        + tools.nan2zero (-qroba .* log2(qroba));
                 otherwise
                     error("Invalid criterion name")
-
             end
+
+            crit_tab(i) = weight * (mean (IS .* s, 3));
 
         end
 
