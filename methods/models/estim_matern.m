@@ -11,7 +11,7 @@ lhood = inf;
 d = size(xi,2);
 
 for j = opt_cov_list
-    cov_temp = convertStringsToChars(prm.list_cov(j));
+    cov_temp = convertStringsToChars (prm.list_cov(j));
     model = stk_model(cov_temp, d);
     param_temp = stk_param_estim(model, xi, zi);
     model.param = param_temp;
