@@ -1,6 +1,6 @@
-%Usage: QSI_SUR(@funct_struct, @config, list_id)
-%Compute sequential DoE using QSI criterion
-%DoE and models parameters are save in /results
+% Usage: QSI_SUR(@funct_struct, @config, list_id)
+% Compute sequential DoE using QSI criterion
+% DoE and models parameters are save in /results
 
 function QSI_SUR(funct_struct, config_func, list_id, DEMO)
 
@@ -60,7 +60,7 @@ for it = list_id
     %estimate and save parameters
     Model = [];
     for m = 1:prm.M
-        [cov, param, ind_cov] = estim_matern(dn, zn(:,m), prm.list_cov);
+        [cov, param, ind_cov] = estim_matern(dn, zn(:,m), prm);
         save_cov(1,:,m) = ind_cov;
 
         Model = [Model, stk_model(cov, dim_tot)];
@@ -230,7 +230,7 @@ for it = list_id
 
 
         for m = 1:prm.M
-            [cov, param, ind_cov] = estim_matern(dn, zn(:,m), prm.list_cov);
+            [cov, param, ind_cov] = estim_matern(dn, zn(:,m), prm);
             save_cov(t+1,:,m) = ind_cov;
 
             Model(m) = stk_model(cov, dim_tot);
