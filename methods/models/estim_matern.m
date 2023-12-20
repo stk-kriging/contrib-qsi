@@ -1,11 +1,10 @@
-% Estimate matern param with constraint on regularity
+% Estimate Matern parametrs with constraint on regularity
 
-function [cov, param, ind_cov] = estim_matern(xi, zi, prm, opt_cov_list)
+function [cov, param, ind_cov] = estim_matern (xi, zi, prm, opt_cov_list)
 
-% Allows to restrict to a given subset of Matern covariance models.
-
+% Default: use all covariance functions from prm.lis_cov
 if nargin < 4
-    opt_cov_list = 1:size(prm.list_cov,1);
+    opt_cov_list = 1:(size (prm.list_cov, 1));
 end
 
 lhood = inf;
