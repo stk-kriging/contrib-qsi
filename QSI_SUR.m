@@ -102,10 +102,10 @@ for it = list_id
             ranking_x = [ranking_x; candidate];
         end
 
-        %define IS weights
-        IS = zeros(config.nVar,1,config.keep_x);
+        % Define IS weights
+        IS = zeros (config.keep_x, config.nVar);
         for j = 1:config.nVar
-            IS(j,1,:) = 1/misclass_x(ranking_x);
+            IS(:, j) = 1 / misclass_x(ranking_x);
         end
 
         %keeping useful parts of dataframe
@@ -172,11 +172,11 @@ for it = list_id
             xc = double([dn;pt]);
             xc_ind = size(xc,1)-1;
 
-            bool = zeros(config.nVar, prm.M, config.keep_x, config.pts_s, config.nTraj);
+            bool = cell (config.nVar, prm.M);
 
             %Generate conditional sample paths
             for m = 1:prm.M
-                [~, lambda]  = stk_predict(Model(m),[dn;pt],[zn(:,m);0],[dn;dt]);
+                [~, lambda]  = stk_predict (Model(m), [dn; pt], [], [dn; dt]);
                 lambda_dn = lambda(1:size(lambda,1)-1,:); %cond to dn
                 lambda_pt = lambda(size(lambda,1),xc_ind+1:size(traj,1)); %cond to pt restricted to dt
 
@@ -192,7 +192,7 @@ for it = list_id
 
                 %Compute criterion for every variables
                 for k=1:config.nVar
-                    bool(k, m, :, :, :) = check_constraints_trajs(tensor_dn,traj_ind,var(k),lambda_pt,prm.const(:,m));
+                    bool{k,m} = check_constraints_trajs(tensor_dn,traj_ind,var(k),lambda_pt,prm.const(:,m));
                 end
 
             end
@@ -202,19 +202,19 @@ for it = list_id
 
             switch config.critName
                 case "m"
-                    crit_tab(r) = weight*mean(IS.*min(proba, 1-proba), 3);
+                    s = min (proba, 1 - proba);
                 case "v"
-                    crit_tab(r) = weight*mean(IS.*(proba.*(1-proba)), 3);
+                    s = proba .* (1 - proba);
                 case "e"
-                    s1 = tools.nan2zero(-proba.*log2(proba));
-                    s2 = tools.nan2zero(-(1-proba).*log2(1-proba));
-                    crit_tab(r) = weight*mean(IS.*(s1+s2), 3);
+                    qroba = 1 - proba;
+                    s = tools.nan2zero (-proba .* log2(proba)) ...
+                        + tools.nan2zero (-qroba .* log2(qroba));
                 otherwise
                     error("Invalid criterion name")
             end
 
-
-
+            crit_tab(r) = sum (weight .* (mean (IS .* s, 1)));
+            
         end
 
         % Update design
