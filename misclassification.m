@@ -33,9 +33,8 @@ for it = id
 
         tic
 
-        %sample points in X x S
-        dt = stk_sampling_randunif(pts_tot,dim_tot,prm.BOX);
-        dt(:, prm.dim_x+1:prm.dim_x+prm.dim_s) = s_trnsf(dt(:, prm.dim_x+1:prm.dim_x+prm.dim_s));
+        % Sample random points, uniformly distributed in X x S
+        dt = double (stk_sampling_randunif (pts_tot, dim_tot, prm.BOX));
 
         % Estimate and save parameters
         Model = stk_model ();

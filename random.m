@@ -39,9 +39,8 @@ for it = id
             save_param(t,:,m) = Model(m).param;
         end
 
-        %sample random point in X x S
-        newpt = double(stk_sampling_randunif(1,dim_tot,prm.BOX));
-        newpt(:, prm.dim_x+1:prm.dim_x+prm.dim_s) = s_trnsf(newpt(:, prm.dim_x+1:prm.dim_x+prm.dim_s));
+        % Sample one random point, uniformly distributed in X x S
+        newpt = double (stk_sampling_randunif (1, dim_tot, prm.BOX));
 
         time = [time, toc];
 
