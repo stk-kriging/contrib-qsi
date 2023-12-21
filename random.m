@@ -35,15 +35,13 @@ for it = id
     for t = 1:config.T
         tic
 
-        %saving GP model and parameters for analysis purposes. not used in the
-        %following script
+        % Estimate and save parameters
+        % (not used in the following script)
         Model = [];
         for m = 1:prm.M
-            [cov, param, ind_cov] = estim_matern(dn, zn(:,m), prm.list_cov);
+            [Model(m), ind_cov] = estim_matern ...
+                (dn, zn(:,m), prm.list_cov, config.lognugget);
             save_cov(t,:,m) = ind_cov;
-
-            Model = [Model, stk_model(cov, dim_tot)];
-            Model(m).param = param;
             save_param(t,:,m) = Model(m).param;
         end
 
@@ -58,16 +56,11 @@ for it = id
 
     end
 
-    %Save design and param
-
+    % Save design and param
     for m = 1:prm.M
-        [cov, param, ind_cov] = tools.estim_matern(dn, zn(:,m), prm.list_cov);
-        %disp(cov);
+        [Model(m), ind_cov] = estim_matern ...
+            (dn, zn(:,m), prm.list_cov, config.lognugget);
         save_cov(config.T+1,:,m) = ind_cov;
-        %cov = convertStringsToChars(cov);
-
-        Model(m) = stk_model(cov, dim_tot);
-        Model(m).param = param;
         save_param(config.T+1,:,m) = Model(m).param;
     end
 
