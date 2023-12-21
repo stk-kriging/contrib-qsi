@@ -57,15 +57,12 @@ for it = list_id
     time = [];
 
 
-    %estimate and save parameters
+    % Estimate and save parameters
     Model = [];
     for m = 1:prm.M
-        [cov, param, ind_cov] = estim_matern(dn, zn(:,m), prm.list_cov);
+        [Model(m), ind_cov] = estim_matern ...
+            (dn, zn(:,m), prm.list_cov, config.lognugget);
         save_cov(1,:,m) = ind_cov;
-
-        Model = [Model, stk_model(cov, dim_tot)];
-        Model(m).param = param;
-        Model(m).lognoisevariance = config.lognugget;
         save_param(1,:,m) = Model(m).param;
     end
 
@@ -78,7 +75,6 @@ for it = list_id
         st = stk_sampling_randomlhs(config.pts_s,prm.dim_s,prm.BOXs);
         st = s_trnsf(st);
         dt = adapt_set(xt,st);
-
 
         %evaluate misclassification probability of \tau(x)
         proba_x = proba_tau(Model, dn , zn, xt, st, prm, config);
@@ -113,7 +109,6 @@ for it = list_id
         xt = xt(ranking_x,:);
         dt = adapt_set(xt,st);
 
-
         %evaluate misclassification probability of \xi(x,s)
         proba_xs = proba_xi(Model, dn, zn, dt, prm);
 
@@ -145,7 +140,6 @@ for it = list_id
         end
         crit_tab = inf + zeros(1,config.keep_xs);
 
-
         %loop on candidate points
         for r = 1:config.keep_xs
 
@@ -167,8 +161,6 @@ for it = list_id
                     weight = 1/prm.nVar*ones(size(var));
                 end
             end
-
-
 
             xc = double([dn;pt]);
             xc_ind = size(xc,1)-1;
@@ -231,12 +223,9 @@ for it = list_id
 
 
         for m = 1:prm.M
-            [cov, param, ind_cov] = estim_matern(dn, zn(:,m), prm.list_cov);
+            [Model(m), ind_cov] = estim_matern ...
+                (dn, zn(:,m), prm.list_cov, config.lognugget);
             save_cov(t+1,:,m) = ind_cov;
-
-            Model(m) = stk_model(cov, dim_tot);
-            Model(m).param = param;
-            Model(m).lognoisevariance = config.lognugget;
             save_param(t+1,:,m) = Model(m).param;
         end
 

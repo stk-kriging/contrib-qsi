@@ -1,21 +1,20 @@
-%estimate matern param with constraint on regularity
-function [cov, param, ind_cov] = estim_matern(xi, zi, list_cov)
+% Estimate matern param with constraint on regularity
+function [model_opt, idx_cov_opt] = ...
+    estim_matern (xi, zi, list_cov, lognugget)
 
-lhood = inf;
-d = size(xi,2);
+model_opt = [];
+lhood_opt = +inf;
 
-for j = 1:size(list_cov,1)
-    cov_temp = convertStringsToChars(list_cov(j));
-    model = stk_model(cov_temp, d);
-    param_temp = stk_param_estim(model, xi, zi);
-    model.param = param_temp;
-    lhood_temp = stk_param_relik(model,xi,zi);
+for j = 1:(size (list_cov, 1))
 
-    if lhood_temp < lhood
-        lhood = lhood_temp;
-        cov = cov_temp;
-        ind_cov = j;
-        param = param_temp;
+    model = stk_model (char (list_cov(j)), size (xi, 2));
+    model.lognoisevariance = lognugget;
+    [model.param, ~, info] = stk_param_estim (model, xi, zi);
+
+    if info.crit_opt < lhood_opt
+        lhood_opt = info.crit_opt;
+        model_opt = model;
+        idx_cov_opt = j;
     end
 end
 

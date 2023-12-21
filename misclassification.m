@@ -40,18 +40,14 @@ for it = id
         dt = stk_sampling_randunif(pts_tot,dim_tot,prm.BOX);
         dt(:, prm.dim_x+1:prm.dim_x+prm.dim_s) = s_trnsf(dt(:, prm.dim_x+1:prm.dim_x+prm.dim_s));
 
-        %estimate parameters
+        % Estimate and save parameters
         Model = [];
         for m = 1:prm.M
-            [cov, param, ind_cov] = estim_matern(dn, zn(:,m), prm.list_cov);
+            [Model(m), ind_cov] = estim_matern ...
+                (dn, zn(:,m), prm.list_cov, config.lognugget);
             save_cov(t,:,m) = ind_cov;
-
-            Model = [Model, stk_model(cov, dim_tot)];
-            Model(m).param = param;
             save_param(t,:,m) = Model(m).param;
         end
-
-
 
         %compute misclassification probability
         proba = proba_xi(Model, dn, zn, dt, prm);
@@ -71,16 +67,13 @@ for it = id
 
     end
 
-    %Save design and param
+    % Save design and param
     for m = 1:prm.M
-        [cov, param, ind_cov] = estim_matern(dn, zn(:,m), prm.list_cov);
+        [Model(m), ind_cov] = estim_matern ...
+            (dn, zn(:,m), prm.list_cov, config.lognugget);
         save_cov(config.T+1,:,m) = ind_cov;
-
-        Model(m) = stk_model(cov, dim_tot);
-        Model(m).param = param;
         save_param(config.T+1,:,m) = Model(m).param;
     end
-
 
     filename = sprintf ('doe_misclassification_%s_%d.csv', prm.name, it);
     writematrix (double (dn), fullfile (here, 'results/design', filename));
