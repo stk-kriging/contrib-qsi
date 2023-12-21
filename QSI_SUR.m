@@ -65,6 +65,7 @@ for it = list_id
 
         Model = [Model, stk_model(cov, dim_tot)];
         Model(m).param = param;
+        Model(m).lognoisevariance = config.lognugget;
         save_param(1,:,m) = Model(m).param;
     end
 
@@ -235,6 +236,7 @@ for it = list_id
 
             Model(m) = stk_model(cov, dim_tot);
             Model(m).param = param;
+            Model(m).lognoisevariance = config.lognugget;
             save_param(t+1,:,m) = Model(m).param;
         end
 
