@@ -44,15 +44,11 @@ for it = id
 
         Model = [];
 
-        %Parameters estimation
+        % Estimate and save parameters
         for m = 1:prm.M
-            [cov, param, ind_cov] = estim_matern(dn, zn(:,m), prm.list_cov);
-
+            [Model(m), ind_cov] = estim_matern ...
+                (dn, zn(:,m), prm.list_cov, config.lognugget);
             save_cov(t,:,m) = ind_cov;
-
-            Model = [Model, stk_model(cov, dim_tot)];
-            Model(m).param = param;
-            Model(m).lognoisevariance = config.lognugget;
             save_param(t,:,m) = Model(m).param;
         end
 
@@ -163,14 +159,11 @@ for it = id
 
     end
 
-    %Save design and params
+    % Save design and params
     for m = 1:prm.M
-        [cov, param, ind_cov] = estim_matern(dn, zn(:,m), prm.list_cov);
+        [Model(m), ind_cov] = estim_matern ...
+            (dn, zn(:,m), prm.list_cov, config.lognugget);
         save_cov(config.T+1,:,m) = ind_cov;
-
-        Model(m) = stk_model(cov, dim_tot);
-        Model(m).param = param;
-        Model(m).lognoisevariance = config.lognugget;
         save_param(config.T+1,:,m) = Model(m).param;
     end
 
