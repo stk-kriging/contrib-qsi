@@ -17,12 +17,6 @@ for it = id
     di = readmatrix(fullfile(here, 'grid', file_grid));
     zi = f(di);
 
-    Model = [];
-    %for m = 1:prm.M
-    %    Model = [Model, stk_model('stk_materncov_aniso',dim_tot)];
-    %Model(m).lm = stk_lm_affine;
-    %end
-
     % Create dataframes
     dn = stk_dataframe(di);
     zn = stk_dataframe(zi);
@@ -37,7 +31,7 @@ for it = id
 
         % Estimate and save parameters
         % (not used in the following script)
-        Model = [];
+        Model = stk_model ();
         for m = 1:prm.M
             [Model(m), ind_cov] = estim_matern ...
                 (dn, zn(:,m), prm.list_cov, config.lognugget);

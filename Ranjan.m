@@ -21,8 +21,6 @@ for it = id
     di = readmatrix(fullfile(here, 'grid', file_grid));
     zi = f(di);
 
-    Model = [];
-
     % Create dataframes
     dn = stk_dataframe(di);
     zn = stk_dataframe(zi);
@@ -42,7 +40,7 @@ for it = id
         dt = stk_sampling_randunif(pts_tot,dim_tot,prm.BOX);
 
         % Estimate parameters
-        Model = [];
+        Model = stk_model ();
         for m = 1:prm.M
             [Model(m), ind_cov] = estim_matern ...
                 (dn, zn(:,m), prm.list_cov, config.lognugget);
