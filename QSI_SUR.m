@@ -44,8 +44,6 @@ for it = list_id
     di = readmatrix(fullfile(here, 'grid', file_grid));
     zi = f(di);
 
-    Model = [];
-
     % Create dataframes
     dn = stk_dataframe(di);
     zn = stk_dataframe(zi);
@@ -56,9 +54,8 @@ for it = list_id
 
     time = [];
 
-
     % Estimate and save parameters
-    Model = [];
+    Model = stk_model ();
     for m = 1:prm.M
         [Model(m), ind_cov] = estim_matern ...
             (dn, zn(:,m), prm.list_cov, config.lognugget);
@@ -220,7 +217,6 @@ for it = list_id
 
         dn = stk_dataframe([dn;newpt]);
         zn = stk_dataframe([zn;f(newpt)]);
-
 
         for m = 1:prm.M
             [Model(m), ind_cov] = estim_matern ...
