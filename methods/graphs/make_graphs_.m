@@ -49,6 +49,7 @@ for m = 1:size(name_list,2)
 
             Model = stk_model(cov,2);
             Model.param = file_para(T+1, :);
+            Model.lognoisevariance = config.lognugget;
             set = get_expected_quantile_set(Model,df,PTS_DIM, PTS_DIM,file(1:config.pts_init+T,:),f(file(1:config.pts_init+T,:)),prm.const,prm.alpha);
 
             f1 = figure('Position', [10 10 wid hei], 'visible', visi, 'Renderer','painters');
