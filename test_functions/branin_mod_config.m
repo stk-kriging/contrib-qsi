@@ -8,6 +8,7 @@ config.pts_s = 100;
 
 config.nVar = 11;
 config.nTraj = 200;
+config.lognugget = log(10^-6);
 
 config.keep_x = 15;
 config.keep_xs = 200;
