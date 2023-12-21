@@ -17,9 +17,6 @@ for it = id
     di = readmatrix(fullfile(here, 'grid', file_grid));
     zi = f(di);
 
-    %Model (x,s)
-    Model = [];
-
     % Create dataframes
     dn = stk_dataframe(di);
     zn = stk_dataframe(zi);
@@ -41,7 +38,7 @@ for it = id
         dt(:, prm.dim_x+1:prm.dim_x+prm.dim_s) = s_trnsf(dt(:, prm.dim_x+1:prm.dim_x+prm.dim_s));
 
         % Estimate and save parameters
-        Model = [];
+        Model = stk_model ();
         for m = 1:prm.M
             [Model(m), ind_cov] = estim_matern ...
                 (dn, zn(:,m), prm.list_cov, config.lognugget);
