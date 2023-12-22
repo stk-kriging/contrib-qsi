@@ -170,6 +170,7 @@ for it = id
     for m = 1:prm.M
         filename = sprintf ('param_joint_%s_%d_%s_%d.csv', config.critName, m, prm.name, it);
         writematrix (save_param(:,:,m), fullfile (here, 'results/param', filename));
+
         filename = sprintf ('cov_joint_%s_%d_%s_%d.csv', config.critName, m, prm.name, it);
         writematrix (save_cov(:,:,m), fullfile (here, 'results/param', filename));
     end

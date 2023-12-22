@@ -79,7 +79,7 @@ for it = id
         filename = sprintf ('param_misclassification_%d_%s_%d.csv', m, prm.name, it);
         writematrix(save_param(:,:,m), fullfile (here, 'results/param', filename));
 
-        filename = sprintf ('cov_misclassification_%s_%d_%s_%d.csv', critName, m, prm.name, it);
+        filename = sprintf ('cov_misclassification_%d_%s_%d.csv', m, prm.name, it);
         writematrix (save_cov(:,:,m), fullfile (here, 'results/param', filename));
     end
 
