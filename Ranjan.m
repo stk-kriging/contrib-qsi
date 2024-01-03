@@ -11,8 +11,8 @@ here = fileparts(mfilename('fullpath'));
 dim_tot = prm.dim_x+prm.dim_s;
 kappa = 1.96;
 
-if prm.const(1,1) > -inf || dim_tot ~= 2
-    error('error')
+if ((abs(prm.const(1,1)) ~= inf) && (abs(prm.const(2,1)) ~= inf)) || prm.M ~= 1
+    error('Error: incorrect problem settings for Ranjan criterion.')
 end
 
 for it = id
