@@ -21,7 +21,7 @@ config.keep2 = config.keep_xs; %number of candidate points to keep
 
 config.critName = "m"; %variations of the criteria. "m" = misclass, "v" = variance, "e" = entropy
 
-config.T = 30; %Number of steps of the algorithm
-config.axT = 1; %Time step for the evaluation of the results
+config.T = 30; % Number of iterations of the algorithm
+config.axT = 1; % Number of iterations between two performance evaluations
 
 end
