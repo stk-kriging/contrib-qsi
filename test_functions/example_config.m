@@ -12,9 +12,9 @@ config.nTraj = 200; %number of trajectories for the evaluation of the QSI criter
 config.lognugget = log(10^-6); %log-variance of the nugget effect
 
 config.keep_x = 50; %number of points to keep in X (QSI only)
-config.keep_xs = 200; %number of candidate points to keep (QSI only)
+config.keep_xs = 250; %number of candidate points to keep (QSI only)
 
-config.keep = config.keep_x*config.pts_s; %number of points to keep in X x S (joint SUR only)
+config.keep = config.keep_x*config.pts_s; %number of points to sample in X x S (joint SUR only)
 config.keep2 = config.keep_xs; %number of candidate points to keep (joint SUR only)
 
 config.critName = "m"; %variations of the criteria. "m" = misclass, "v" = variance, "e" = entropy
