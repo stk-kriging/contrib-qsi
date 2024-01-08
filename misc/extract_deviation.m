@@ -1,5 +1,5 @@
 %Allow to extract and save statistics on the algorithms given a list_id of
-%runs. 
+%runs.
 
 
 function extract_deviation(funct_struct, config, name, list_id)
@@ -38,38 +38,27 @@ for it = list_id
         file_cov(:,:,m) = readmatrix(fullfile(here, '../results/param/', filename_cov));
     end
 
-    Model = [];
-
     dev = [];
-    false_pos = [];
-    false_neg = [];
 
-    for j = 1:prm.axT:prm.T+1
+    for j = 1:config.axT:config.T+1
 
-        dt = design(1:prm.pts_init+j-1,:);
+        dt = design(1:config.pts_init+j-1,:);
         zt = f(dt);
-        Model = [];
+        Model = stk_model ();
 
         for m = 1:prm.M
             cov = convertStringsToChars(prm.list_cov(file_cov(j,:,m)));
-            Model = [Model, stk_model(cov, dim_tot)];
+            Model(m) = stk_model(cov, dim_tot);
             Model(m).param = para(j,:,m);
         end
 
         approxSet = get_expected_quantile_set(Model,df,PTS_X, PTS_S,dt,zt,prm.const,prm.alpha);
         dev = [dev, lebesgue_deviation(trueSet,approxSet)];
-        false_pos = [false_pos, lebesgue_diff(approxSet, trueSet)];
-        false_neg = [false_neg, lebesgue_diff(trueSet, approxSet)];
+
     end
 
     filename_dev = sprintf('dev_%s_%s_%d.csv', name, prm.name, it);
     writematrix(dev,fullfile(here, '../results/deviations', filename_dev));
-
-    filename_pos = sprintf('false_pos_%s_%s_%d.csv', name, prm.name, it);
-    writematrix(false_pos, fullfile(here, '../results/deviations', filename_pos));
-
-    filename_neg = sprintf('false_neg_%s_%s_%d.csv', name, prm.name, it);
-    writematrix(false_neg, fullfile(here, '../results/deviations', filename_neg));
 
 end
 
