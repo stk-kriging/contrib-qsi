@@ -9,7 +9,7 @@ for j = 1:(size (list_cov, 1))
 
     model = stk_model (char (list_cov(j)), size (xi, 2));
     model.lognoisevariance = lognugget;
-    [model.param, ~, info] = stk_param_estim (model, xi, zi);
+    [model, info] = stk_param_estim (model, xi, zi);
 
     if info.crit_opt < lhood_opt
         lhood_opt = info.crit_opt;
