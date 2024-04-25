@@ -2,7 +2,13 @@
 %Compute sequential DoE using joint SUR criterion
 %DoE and models parameters are save in /results
 
-function joint_SUR(funct_struct, config, id)
+function joint_SUR(funct_struct, config, it, filePath)
+
+disp("Run number "+int2str(it))
+
+if nargin < 4
+    filePath = 'data';
+end
 
 [prm, f, s_trnsf] = funct_struct();
 config = config();
@@ -10,17 +16,21 @@ here = fileparts(mfilename('fullpath'));
 
 dim_tot = prm.dim_x+prm.dim_s;
 
-for it = id
-
-    %If size output = 1, initizalize Gaussian quadrature
+    %If size output = 1, initizalize Gaussian quadrature + define threshold
     if prm.M == 1
         quantOpt.nbLevels = config.nVar;
         quantOpt.useGaussHermite = 1;
+
+        if abs(prm.const(1)) ~= inf
+            crit_U = prm.const(1);
+        else
+            crit_U = prm.const(2);
+        end
     end
 
     %Initial design
-    file_grid = sprintf ('grid_%s_%d_init.csv', prm.name, it);
-    di = readmatrix(fullfile(here, 'grid', file_grid));
+    file_grid = sprintf ('doe_init_%s_%d_init.csv', prm.name, it);
+    di = readmatrix(fullfile(here, filePath, 'doe_init', file_grid));
     zi = f(di);
 
     % Create dataframes
@@ -34,11 +44,10 @@ for it = id
     time = [];
 
     for t = 1:config.T
-
         tic
 
         dt = stk_sampling_randunif(config.pts_x*config.pts_s,dim_tot,prm.BOX);
-        dt(:, prm.dim_x+1:prm.dim_x+prm.dim_s) = s_trnsf(dt(:, prm.dim_x+1:prm.dim_x+prm.dim_s));
+        %dt(:, prm.dim_x+1:prm.dim_x+prm.dim_s) = s_trnsf(dt(:, prm.dim_x+1:prm.dim_x+prm.dim_s));
 
         % Estimate and save parameters
         Model = stk_model ();
@@ -85,13 +94,24 @@ for it = id
         pts_dt = config.keep;
 
 
-        crit_tab = inf + zeros(1,config.keep2);
+        crit_tab = inf + zeros(1,config.keep2); 
 
         % Start boucle on dt.
-        for i = 1:config.keep2
 
-            pt = double(dt(i,:));
-            crit = 0;
+        if prm.M == 1 
+            [z_pred, ignore_lambda, ignore_mu, Kpost_all] = ...
+            stk_predict (Model(1), dn, zn, dt);
+            for i = 1:config.keep2
+                K12 = Kpost_all(:, i);  % Posterior covariance between locations x and x_new
+                K22 = Kpost_all(i, i);  % Posterior variance at xnew
+
+                crit_tab(i) = mean(stk_pmisclass (crit_U, z_pred, K12, K22));
+            end
+
+        else
+            for i = 1:config.keep2
+                pt = double(dt(i,:));
+                crit = 0;
 
             var = [];
 
@@ -141,6 +161,7 @@ for it = id
             end
 
             crit_tab(i) = weight * (mean (IS .* s, 3));
+            end
 
         end
 
@@ -165,19 +186,18 @@ for it = id
     end
 
     filename = sprintf ('doe_joint_%s_%s_%d.csv',config.critName, prm.name, it);
-    writematrix (double (dn), fullfile (here, 'results/design', filename));
+    writematrix (double (dn), fullfile (here, filePath, 'results/design', filename));
 
     for m = 1:prm.M
         filename = sprintf ('param_joint_%s_%d_%s_%d.csv', config.critName, m, prm.name, it);
-        writematrix (save_param(:,:,m), fullfile (here, 'results/param', filename));
+        writematrix (save_param(:,:,m), fullfile (here, filePath, 'results/param', filename));
 
         filename = sprintf ('cov_joint_%s_%d_%s_%d.csv', config.critName, m, prm.name, it);
-        writematrix (save_cov(:,:,m), fullfile (here, 'results/param', filename));
+        writematrix (save_cov(:,:,m), fullfile (here, filePath, 'results/param', filename));
     end
 
     filename = sprintf ('time_joint_%s_%s_%d.csv', config.critName, prm.name, it);
-    writematrix (time, fullfile (here, 'results/time', filename));
+    writematrix (time, fullfile (here, filePath, 'results/time', filename));
 
 end
 
-end
