@@ -2,19 +2,22 @@
 %Random DoE
 %DoE and models parameters are save in /results
 
-function random(funct_struct, config, id)
+function random(funct_struct, config, it, filePath)
 
+disp("Run number "+int2str(it))
+
+if nargin < 4
+    filePath = 'data';
+end
 [prm, f, s_trnsf] = funct_struct();
 config = config();
 here = fileparts(mfilename('fullpath'));
 
 dim_tot = prm.dim_x+prm.dim_s;
 
-for it = id
-
     %Initial design
-    file_grid = sprintf ('grid_%s_%d_init.csv', prm.name, it);
-    di = readmatrix(fullfile(here, 'grid', file_grid));
+    file_grid = sprintf ('doe_init_%s_%d_init.csv', prm.name, it);
+    di = readmatrix(fullfile(here, filePath, 'doe_init', file_grid));
     zi = f(di);
 
     % Create dataframes
@@ -58,19 +61,19 @@ for it = id
     end
 
     filename = sprintf ('doe_random_%s_%d.csv', prm.name, it);
-    writematrix(double (dn), fullfile (here, 'results/design', filename));
+    writematrix(double (dn), fullfile (here, filePath, 'results/design', filename));
 
     for m = 1:prm.M
         filename = sprintf ('param_random_%d_%s_%d.csv', m, prm.name, it);
-        writematrix(save_param(:,:,m), fullfile (here, 'results/param', filename));
+        writematrix(save_param(:,:,m), fullfile (here, filePath, 'results/param', filename));
 
         filename = sprintf ('cov_random_%d_%s_%d.csv', m, prm.name, it);
-        writematrix (save_cov(:,:,m), fullfile (here, 'results/param', filename));
+        writematrix (save_cov(:,:,m), fullfile (here, filePath, 'results/param', filename));
     end
 
     filename = sprintf ('time_random_%s_%d.csv', prm.name, it);
-    writematrix(time, fullfile (here, 'results/time', filename));
+    writematrix(time, fullfile (here, filePath, 'results/time', filename));
 
 end
 
-end
+

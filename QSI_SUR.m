@@ -2,7 +2,13 @@
 %Compute sequential DoE using QSI criterion
 %DoE and models parameters are save in /results
 
-function QSI_SUR(funct_struct, config_func, list_id, DEMO)
+function QSI_SUR(funct_struct, config_func, it, DEMO, filePath)
+
+disp("Run number "+int2str(it))
+
+if nargin < 5
+    filePath = 'data';
+end
 
 [prm, f, s_trnsf] = funct_struct(); %loading function and parameters
 config = config_func();
@@ -29,7 +35,6 @@ end
 
 
 %loop on different runs
-for it = list_id
 
     dim_tot = prm.dim_x+prm.dim_s;
 
@@ -40,8 +45,8 @@ for it = list_id
     end
 
     %Initial design
-    file_grid = sprintf ('grid_%s_%d_init.csv', prm.name, it);
-    di = readmatrix(fullfile(here, 'grid', file_grid));
+    file_grid = sprintf ('doe_init_%s_%d_init.csv', prm.name, it);
+    di = readmatrix(fullfile(here, filePath, 'doe_init', file_grid));
     zi = f(di);
 
     % Create dataframes
@@ -64,7 +69,6 @@ for it = list_id
     end
 
     for t = 1:config.T %loop on steps
-
         tic
 
         %sampling points in X x S
@@ -227,18 +231,18 @@ for it = list_id
 
 
         filename = sprintf ('doe_QSI_%s_%s_%d.csv', config.critName, prm.name, it);
-        writematrix (double (dn), fullfile (here, 'results/design', filename));
+        writematrix (double (dn), fullfile (here, filePath, 'results/design', filename));
 
         for m = 1:prm.M
             filename = sprintf ('param_QSI_%s_%d_%s_%d.csv', config.critName, m, prm.name, it);
-            writematrix (save_param(:,:,m), fullfile (here, 'results/param', filename));
+            writematrix (save_param(:,:,m), fullfile (here, filePath, 'results/param', filename));
 
             filename = sprintf ('cov_QSI_%s_%d_%s_%d.csv', config.critName, m, prm.name, it);
-            writematrix (save_cov(:,:,m), fullfile (here, 'results/param', filename));
+            writematrix (save_cov(:,:,m), fullfile (here, filePath, 'results/param', filename));
         end
 
         filename = sprintf ('time_QSI_%s_%s_%d.csv', config.critName, prm.name, it);
-        writematrix (time, fullfile (here, 'results/time', filename));
+        writematrix (time, fullfile (here, filePath, 'results/time', filename));
 
         if DEMO == 1
 
@@ -265,4 +269,3 @@ for it = list_id
 
 end
 
-end

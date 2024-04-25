@@ -29,9 +29,7 @@ for m = 1:size(name_list,2)
     trueSet = ensemble.get_mean_set_multi(zf, PTS_DIM, PTS_DIM, prm.alpha, prm.const);
 
     for it = it_list
-        disp(it)
         for T = AX
-
 
             warning('off','all')
 

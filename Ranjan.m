@@ -2,7 +2,13 @@
 %Compute sequential DoE using Ranjan sampling criterion
 %DoE and models parameters are save in /results
 
-function Ranjan(funct_struct, config, id)
+function Ranjan(funct_struct, config, it, filePath)
+
+disp("Run number "+int2str(it))
+
+if nargin < 4
+    filePath = 'data';
+end
 
 [prm, f, s_trnsf] = funct_struct();
 config = config();
@@ -15,10 +21,14 @@ if ((abs(prm.const(1,1)) ~= inf) && (abs(prm.const(2,1)) ~= inf)) || prm.M ~= 1
     error('Error: incorrect problem settings for Ranjan criterion.')
 end
 
-for it = id
+if abs(prm.const(1,1)) == inf
+    prm.const(1,1) = prm.const(2,1);
+    prm.const(2,1) = inf;
+end
+
     %Initial design
-    file_grid = sprintf ('grid_%s_%d_init.csv', prm.name, it);
-    di = readmatrix(fullfile(here, 'grid', file_grid));
+    file_grid = sprintf ('doe_init_%s_%d_init.csv', prm.name, it);
+    di = readmatrix(fullfile(here, filePath, 'doe_init', file_grid));
     zi = f(di);
 
     % Create dataframes
@@ -61,9 +71,10 @@ for it = id
         cdf_plus = normcdf(tau_plus);
         cdf_minus = normcdf(tau_minus);
 
-        crit_tab = var.*(kappa^2 - 1 - tau.^2).*(cdf_plus - cdf_minus) - ...
+        crit_tab = (kappa^2 - 1 - tau.^2).*(cdf_plus - cdf_minus) - ...
             2*tau.*(phi_plus - phi_minus) + ...
             tau_plus.*phi_plus - tau_minus.*phi_minus;
+        crit_tab = var.* crit_tab;
 
         % Update design
         [~, indmax] = max(crit_tab);
@@ -84,20 +95,19 @@ for it = id
         save_param(config.T+1,:,m) = Model(m).param;
     end
 
-    filename = sprintf ('doe_ranjan_%s_%d.csv', prm.name, it);
-    writematrix (double (dn), fullfile (here, 'results/design', filename));
+    filename = sprintf ('doe_Ranjan_%s_%d.csv', prm.name, it);
+    writematrix (double (dn), fullfile (here, filePath, 'results/design', filename));
 
     for m = 1:prm.M
-        filename = sprintf ('param_ranjan_%d_%s_%d.csv', m, prm.name, it);
-        writematrix(save_param(:,:,m), fullfile (here, 'results/param', filename));
+        filename = sprintf ('param_Ranjan_%d_%s_%d.csv', m, prm.name, it);
+        writematrix(save_param(:,:,m), fullfile (here, filePath, 'results/param', filename));
 
-        filename = sprintf ('cov_ranjan_%d_%s_%d.csv', m, prm.name, it);
-        writematrix (save_cov(:,:,m), fullfile (here, 'results/param', filename));
+        filename = sprintf ('cov_Ranjan_%d_%s_%d.csv', m, prm.name, it);
+        writematrix (save_cov(:,:,m), fullfile (here, filePath, 'results/param', filename));
     end
 
-    filename = sprintf ('time_ranjan_%s_%d.csv', prm.name, it);
-    writematrix(time, fullfile (here, 'results/time', filename));
+    filename = sprintf ('time_Ranjan_%s_%d.csv', prm.name, it);
+    writematrix(time, fullfile (here, filePath, 'results/time', filename));
 
 end
 
-end
