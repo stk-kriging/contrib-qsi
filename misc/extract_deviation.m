@@ -25,14 +25,19 @@ config = config();
 
 here = fileparts(mfilename('fullpath'));
 
-dim_tot = prm.dim_x+prm.dim_s;
-
-xf = stk_sampling_sobol(PTS_X, prm.dim_x, prm.BOXx);
-sf = stk_sampling_sobol(PTS_S, prm.dim_s, prm.BOXs);
-sf = s_trnsf(sf);
-df = adapt_set(xf,sf);
-
-zf = f(df);
+file = sprintf('results_grid_%s.csv', prm.name);
+file = fullfile(here, '..', 'data/grid', file);
+if ~exist(file, "file")
+    xf = stk_sampling_sobol(PTS_X, prm.dim_x, prm.BOXx);
+    sf = stk_sampling_sobol(PTS_S, prm.dim_s, prm.BOXs);
+    sf = s_trnsf(sf);
+    df = adapt_set(xf,sf);
+    zf = f(df);
+    csvwrite(file, zf);
+else
+    zf = csvread(file);
+end
+zf = double(zf);
 
 trueSet = get_true_quantile_set(zf, PTS_X, PTS_S, prm.alpha, prm.const);
 
