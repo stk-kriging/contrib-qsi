@@ -13,7 +13,7 @@ end
 
 here = fileparts(mfilename('fullpath'));
 visi = 'on';
-PTS_DIM = 300;
+PTS_DIM = 250;
 
 wid = int64(450);
 hei = int64(0.76*wid);
@@ -37,9 +37,9 @@ for m = 1:size(name_list,2)
 
             warning('off','all')
 
-            filename = fullfile(here, '../../results/design', sprintf('doe_%s_%s_%d.csv', name, prm.name, it));
-            filename_para = fullfile(here, '../../results/param', sprintf('param_%s_1_%s_%d.csv', name, prm.name, it));
-            filename_cov = fullfile(here, '../../results/param', sprintf('cov_%s_1_%s_%d.csv', name, prm.name, it));
+            filename = fullfile(here, '../../data/results/design', sprintf('doe_%s_%s_%d.csv', name, prm.name, it));
+            filename_para = fullfile(here, '../../data/results/param', sprintf('param_%s_1_%s_%d.csv', name, prm.name, it));
+            filename_cov = fullfile(here, '../../data/results/param', sprintf('cov_%s_1_%s_%d.csv', name, prm.name, it));
 
             file = readmatrix(filename);
             file_para = readmatrix(filename_para);
