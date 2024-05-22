@@ -1,3 +1,10 @@
+% Copyright Notice
+%
+% Copyright (C)2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+
+
 function prob = proba_joint_cond(const,mu_dn,lambda_pt,var,sigma)
 
 mu = mu_dn + var*lambda_pt;

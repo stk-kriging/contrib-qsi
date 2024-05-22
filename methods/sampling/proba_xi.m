@@ -1,3 +1,9 @@
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+
 function proba = proba_xi(Model, dn, zn, dt, prm)
 
 proba = 1;

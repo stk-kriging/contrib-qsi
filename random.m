@@ -1,6 +1,13 @@
 %Usage: random(@funct_struct, @config, list_id)
 %Random DoE
-%DoE and models parameters are save in /results
+%DoE and models parameters are save in data/results
+
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+
 
 function random(funct_struct, config, it, filePath)
 

@@ -1,3 +1,10 @@
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+
+
 function proba = proba_tau(Model, dn , zn, xt, st, prm, config)
 
 proba = zeros(config.pts_x,1);

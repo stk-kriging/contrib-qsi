@@ -27,6 +27,12 @@
 % Both z and w are of size 1 x opts.nbLevels
 %
 
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Julien Bect <julien.bect@centralesupelec.fr>
+
 function [z,w] = quantization( m, s, tmp )
 
 if isnumeric(tmp), % syntax 1

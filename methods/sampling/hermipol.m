@@ -1,3 +1,10 @@
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Julien Bect <julien.bect@centralesupelec.fr>
+
+
 function p = hermipol(n)
 % create hermite polynomial
 
