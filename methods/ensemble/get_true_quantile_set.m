@@ -1,3 +1,9 @@
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+
 function [ze, proba] = get_true_quantile_set(z, xsize, usize, a, const)
 
 eval = z;

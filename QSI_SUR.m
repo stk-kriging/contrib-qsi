@@ -1,6 +1,13 @@
 %Usage: QSI_SUR(@funct_struct, @config, list_id)
 %Compute sequential DoE using QSI criterion
-%DoE and models parameters are save in /results
+%DoE and models parameters are save in data/results
+
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+%             Julien Bect <julien.bect@centralesupelec.fr>
 
 function QSI_SUR(funct_struct, config_func, it, DEMO, filePath)
 

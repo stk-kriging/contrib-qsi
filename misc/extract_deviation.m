@@ -1,6 +1,13 @@
 %Allow to extract and save statistics on the algorithms given a list_id of
 %runs.
 
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+%             Julien Bect <julien.bect@centralesupelec.fr>
+
 
 function extract_deviation(funct_struct, config, name, it, filePath)
 

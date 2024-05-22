@@ -2,6 +2,12 @@
 %Compute sequential DoE using Ranjan sampling criterion
 %DoE and models parameters are save in /results
 
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+
 function Ranjan(funct_struct, config, it, filePath)
 
 disp("Run number "+int2str(it))

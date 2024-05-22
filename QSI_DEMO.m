@@ -6,6 +6,12 @@
 %  points belonging to the critical region (black and red curves).
 % - True and estimated quantile sets.
 
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+
 DEMO = 1;
 ID = -1;
 
@@ -21,7 +27,7 @@ if (prm.dim_x ~= 1) || (prm.dim_s ~= 1)
     error("Invalid problem dimension")
 end
 
-generate_grid(funct_struct, funct_config, ID);
+generate_doe_init(funct_struct, funct_config, ID);
 QSI_SUR(funct_struct, funct_config, ID, DEMO);
 
 %Deleting saved datas

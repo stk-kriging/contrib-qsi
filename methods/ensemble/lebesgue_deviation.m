@@ -1,6 +1,12 @@
 %Compute lebesgue measure of the symmetric difference between two quantiles
 %sets.
 
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+
 function dev = lebesgue_deviation(set1,set2)
 
 part1 = set1-set2;

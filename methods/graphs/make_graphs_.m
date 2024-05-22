@@ -1,3 +1,10 @@
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+
+
 function [f1, f2] = make_graphs_(funct_struct, config_func, name_list, name_graphs, id_list, AX, SAVE)
 
 [prm, f, s_trnsf] = funct_struct();

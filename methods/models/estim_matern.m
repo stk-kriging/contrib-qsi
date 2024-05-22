@@ -1,3 +1,11 @@
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+%             Julien Bect <julien.bect@centralesupelec.fr>
+
+
 % Estimate matern param with constraint on regularity
 function [model_opt, idx_cov_opt] = ...
     estim_matern (xi, zi, list_cov, lognugget)
