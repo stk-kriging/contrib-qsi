@@ -1,3 +1,10 @@
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+%             Julien Bect <julien.bect@centralesupelec.fr>
+
 function [prm, f, s_trnsf] = branin_mod_struct()
 
 f = @branin_mod;

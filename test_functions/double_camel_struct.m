@@ -1,3 +1,10 @@
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+%             Julien Bect <julien.bect@centralesupelec.fr>
+
 function [prm, f, s_trnsf] = double_camel_struct()
 
 f = @double_camel;
