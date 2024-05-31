@@ -1,9 +1,15 @@
 %Usage: generate_grid(@funct_struct, @config, list_id)
 % Generate initial design for experiments on a given function, for a list
 % of identifiers.
-%Initial designs are saved in /grid.
+%Initial designs are saved in /data/doe_init.
 
-function generate_grid(funct_struct, config, list_id)
+% Copyright Notice
+%
+% Copyright (C) 2024 CentraleSupelec
+%
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr>
+
+function generate_doe_init(funct_struct, config, list_id)
 
 [prm, ~, s_trnsf] = funct_struct();
 config = config();
