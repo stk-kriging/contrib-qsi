@@ -9,11 +9,15 @@
 %    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
 %             Julien Bect <julien.bect@centralesupelec.fr>
 
-function QSI_SUR(funct_struct, config_func, it, DEMO, filePath)
+function QSI_SUR(funct_struct, config_func, it, filePath, DEMO)
 
 disp("Run number "+int2str(it))
 
 if nargin < 5
+    DEMO = 0;
+end
+
+if nargin < 4
     filePath = 'data';
 end
 
@@ -230,8 +234,10 @@ end
         zn = stk_dataframe([zn;f(newpt)]);
 
         for m = 1:prm.M
+            if mod(t, config.estim_param_steps) == 0
             [Model(m), ind_cov] = estim_matern ...
                 (dn, zn(:,m), prm.list_cov, config.lognugget);
+            end
             save_cov(t+1,:,m) = ind_cov;
             save_param(t+1,:,m) = Model(m).param;
         end

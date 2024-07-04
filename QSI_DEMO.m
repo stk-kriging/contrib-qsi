@@ -28,7 +28,7 @@ if (prm.dim_x ~= 1) || (prm.dim_s ~= 1)
 end
 
 generate_doe_init(funct_struct, funct_config, ID);
-QSI_SUR(funct_struct, funct_config, ID, DEMO);
+QSI_SUR(funct_struct, funct_config, ID, 'data', DEMO);
 
 %Deleting saved datas
 filename = sprintf('doe_init_%s_init_%d.csv', prm.name, ID); %delete grid
