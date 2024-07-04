@@ -61,8 +61,10 @@ dim_tot = prm.dim_x+prm.dim_s;
 
     % Save design and param
     for m = 1:prm.M
+        if mod(t, config.estim_param_steps) == 0
         [Model(m), ind_cov] = estim_matern ...
             (dn, zn(:,m), prm.list_cov, config.lognugget);
+        end
         save_cov(config.T+1,:,m) = ind_cov;
         save_param(config.T+1,:,m) = Model(m).param;
     end
