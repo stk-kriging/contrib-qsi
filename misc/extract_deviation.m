@@ -1,25 +1,25 @@
+% Allow to extract and save statistics on the algorithms given a list_id of
+% runs.
+%
+% Name should be the identifier of the method in the corresponding file
+% names. For example, for a QSI-SUR (misclassification-based) : QSI_m
+%
+% it designates the numerical id of the run.
+
 % Copyright Notice
 %
 % Copyright (C) 2024 CentraleSupelec
 %
-%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr>
 %             Julien Bect <julien.bect@centralesupelec.fr>
 
-
-%Allow to extract and save statistics on the algorithms given a list_id of
-%runs.
-%Name should be the identifier of the method in the corresponding file
-%names
-%For example, for a QSI-SUR (misclassification-based) : QSI_m
-
-%it designates the numerical id of the run.
-
-function extract_deviation(funct_struct, config, name, it, filePath)
+function extract_deviation(funct_struct, config, name, it, data_dir)
 
 disp("Run number "+int2str(it))
 
 if nargin < 5
-    filePath = 'data';
+    here = fileparts (mfilename ('fullpath'));
+    data_dir = fullfile (here, '..', 'data');
 end
 
 PTS_X = config.pts_eval_x;
@@ -28,17 +28,18 @@ PTS_S = config.pts_eval_s;
 [prm, f, s_trnsf] = funct_struct();
 config = config();
 
-here = fileparts(mfilename('fullpath'));
+dim_tot = prm.dim_x + prm.dim_s;
 
-file = sprintf('results_grid_%s.csv', prm.name);
-file = fullfile(here, '..', 'data/grid', file);
-if ~exist(file, "file")
-    xf = stk_sampling_sobol(PTS_X, prm.dim_x, prm.BOXx);
-    sf = stk_sampling_sobol(PTS_S, prm.dim_s, prm.BOXs);
-    sf = s_trnsf(sf);
-    df = adapt_set(xf,sf);
+xf = stk_sampling_sobol(PTS_X, prm.dim_x, prm.BOXx);
+sf = stk_sampling_sobol(PTS_S, prm.dim_s, prm.BOXs);
+sf = s_trnsf(sf);
+df = adapt_set (xf, sf);
+
+file = sprintf ('results_grid_%s.csv', prm.name);
+file = fullfile (data_dir, 'grid', file);
+if ~ exist (file, "file")
     zf = f(df);
-    csvwrite(file, zf);
+    csvwrite (file, zf);
 else
     zf = csvread(file);
 end
@@ -46,40 +47,38 @@ zf = double(zf);
 
 trueSet = get_true_quantile_set(zf, PTS_X, PTS_S, prm.alpha, prm.const);
 
+file_design = sprintf('doe_%s_%s_%d.csv', name, prm.name, it);
+design = readmatrix(fullfile(data_dir, 'results/design', file_design));
 
-    file_design = sprintf('doe_%s_%s_%d.csv', name, prm.name, it);
-    design = readmatrix(fullfile(here, filePath, 'results/design', file_design));
+para = zeros(config.T+1, dim_tot+1, prm.M);
+file_cov = zeros(config.T+1,1,prm.M);
 
-    para = zeros(config.T+1, dim_tot+1, prm.M);
-    file_cov = zeros(config.T+1,1,prm.M);
+for m =1:prm.M
+    filename_para = sprintf('param_%s_%d_%s_%d.csv', name, m, prm.name, it);
+    para(:,:,m) = readmatrix(fullfile(data_dir, 'results/param/', filename_para));
+    filename_cov = sprintf('cov_%s_%d_%s_%d.csv', name, m, prm.name, it);
+    file_cov(:,:,m) = readmatrix(fullfile(data_dir, 'results/param/', filename_cov));
+end
 
-    for m =1:prm.M
-        filename_para = sprintf('param_%s_%d_%s_%d.csv', name, m, prm.name, it);
-        para(:,:,m) = readmatrix(fullfile(here, filePath, 'results/param/', filename_para));
-        filename_cov = sprintf('cov_%s_%d_%s_%d.csv', name, m, prm.name, it);
-        file_cov(:,:,m) = readmatrix(fullfile(here, filePath, 'results/param/', filename_cov));
+dev = [];
+
+for j = 1:config.axT:config.T+1
+    dt = design(1:config.pts_init+j-1,:);
+    zt = f(dt);
+    Model = stk_model ();
+
+    for m = 1:prm.M
+        cov = convertStringsToChars(prm.list_cov(file_cov(j,:,m)));
+        Model(m) = stk_model(cov, dim_tot);
+        Model(m).param = para(j,:,m);
     end
 
-    dev = [];
-
-    for j = 1:config.axT:config.T+1
-        dt = design(1:config.pts_init+j-1,:);
-        zt = f(dt);
-        Model = stk_model ();
-
-        for m = 1:prm.M
-            cov = convertStringsToChars(prm.list_cov(file_cov(j,:,m)));
-            Model(m) = stk_model(cov, dim_tot);
-            Model(m).param = para(j,:,m);
-        end
-
-        approxSet = get_expected_quantile_set(Model,df,PTS_X, PTS_S,dt,zt,prm.const,prm.alpha);
-        dev = [dev, lebesgue_deviation(trueSet,approxSet)];
-
-    end
-
-    filename_dev = sprintf('dev_%s_%s_%d.csv', name, prm.name, it);
-    writematrix(dev,fullfile(here, filePath, 'results/deviations', filename_dev));
+    approxSet = get_expected_quantile_set(Model,df,PTS_X, PTS_S,dt,zt,prm.const,prm.alpha);
+    dev = [dev, lebesgue_deviation(trueSet,approxSet)];
 
 end
 
+filename_dev = sprintf('dev_%s_%s_%d.csv', name, prm.name, it);
+writematrix(dev,fullfile(data_dir, 'results/deviations', filename_dev));
+
+end

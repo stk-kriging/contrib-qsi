@@ -1,6 +1,6 @@
-%Usage: Ranjan(@funct_struct, @config, list_id)
-%Compute sequential DoE using Ranjan sampling criterion
-%DoE and models parameters are save in /results
+% Usage: Ranjan (@funct_struct, @config, list_id, data_dir)
+% Compute sequential DoE using Ranjan sampling criterion
+% DoE and models parameters are save in /results
 
 % Copyright Notice
 %
@@ -8,12 +8,13 @@
 %
 %    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
 
-function Ranjan(funct_struct, config, it, filePath)
+function Ranjan(funct_struct, config, it, data_dir)
 
 disp("Run number "+int2str(it))
 
 if nargin < 4
-    filePath = 'data';
+    here = fileparts (mfilename ('fullpath'));
+    data_dir = fullfile (here, 'data');
 end
 
 [prm, f, s_trnsf] = funct_struct();
@@ -34,7 +35,7 @@ end
 
     %Initial design
     file_grid = sprintf ('doe_init_%s_%d_init.csv', prm.name, it);
-    di = readmatrix(fullfile(here, filePath, 'doe_init', file_grid));
+    di = readmatrix(fullfile(data_dir, 'doe_init', file_grid));
     zi = f(di);
 
     % Create dataframes
@@ -104,18 +105,17 @@ end
     end
 
     filename = sprintf ('doe_Ranjan_%s_%d.csv', prm.name, it);
-    writematrix (double (dn), fullfile (here, filePath, 'results/design', filename));
+    writematrix (double (dn), fullfile (data_dir, 'results/design', filename));
 
     for m = 1:prm.M
         filename = sprintf ('param_Ranjan_%d_%s_%d.csv', m, prm.name, it);
-        writematrix(save_param(:,:,m), fullfile (here, filePath, 'results/param', filename));
+        writematrix(save_param(:,:,m), fullfile (data_dir, 'results/param', filename));
 
         filename = sprintf ('cov_Ranjan_%d_%s_%d.csv', m, prm.name, it);
-        writematrix (save_cov(:,:,m), fullfile (here, filePath, 'results/param', filename));
+        writematrix (save_cov(:,:,m), fullfile (data_dir, 'results/param', filename));
     end
 
     filename = sprintf ('time_Ranjan_%s_%d.csv', prm.name, it);
-    writematrix(time, fullfile (here, filePath, 'results/time', filename));
+    writematrix(time, fullfile (data_dir, 'results/time', filename));
 
 end
-
