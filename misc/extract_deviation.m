@@ -1,6 +1,3 @@
-%Allow to extract and save statistics on the algorithms given a list_id of
-%runs.
-
 % Copyright Notice
 %
 % Copyright (C) 2024 CentraleSupelec
@@ -8,6 +5,14 @@
 %    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
 %             Julien Bect <julien.bect@centralesupelec.fr>
 
+
+%Allow to extract and save statistics on the algorithms given a list_id of
+%runs.
+%Name should be the identifier of the method in the corresponding file
+%names
+%For example, for a QSI-SUR (misclassification-based) : QSI_m
+
+%it designates the numerical id of the run.
 
 function extract_deviation(funct_struct, config, name, it, filePath)
 
