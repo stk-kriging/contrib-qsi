@@ -19,8 +19,8 @@ here = fileparts(mfilename('fullpath'));
 for it = list_id
     dim_tot = prm.dim_x+prm.dim_s;
     di = stk_sampling_maximinlhs(config.pts_init,dim_tot,prm.BOX);
-    filename = sprintf ('grid_%s_%d_init.csv', prm.name, it);
-    writematrix (double (di), fullfile (here, 'grid', filename));
+    filename = sprintf ('doe_init_%s_%d_init.csv', prm.name, it);
+    writematrix (double (di), fullfile (here, 'data/doe_init', filename));
 end
 
 end
