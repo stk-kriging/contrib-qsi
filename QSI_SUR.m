@@ -268,7 +268,8 @@ end
                 xticks([])
                 camroll(90);
 
-                [f1, f2] = make_graphs_(funct_struct, config_func, ["QSI_"+config.critName], [sprintf("%d steps", t)], it, t, 0);
+                [f1, f2] = make_graphs_ (data_dir, funct_struct, config_func, ...
+                    ["QSI_"+config.critName], [sprintf("%d steps", t)], it, t, 0);
                 disp("PAUSED: press any key to continue.")
                 pause()
             end
