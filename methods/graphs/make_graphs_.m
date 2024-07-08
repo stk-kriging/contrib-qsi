@@ -2,10 +2,12 @@
 %
 % Copyright (C) 2024 CentraleSupelec
 %
-%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr> 
+%    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr>
+%             Julien Bect <julien.bect@centralesupelec.fr>
 
-
-function [f1, f2] = make_graphs_(funct_struct, config_func, name_list, name_graphs, id_list, AX, SAVE)
+function [f1, f2] = make_graphs_ (         ...
+    data_dir, funct_struct, config_func,   ...
+    name_list, name_graphs, id_list, AX, SAVE)
 
 [prm, f, s_trnsf] = funct_struct();
 config = config_func();
@@ -18,7 +20,6 @@ if (SAVE ~= 0) && (SAVE ~=1)
     error("Invalid value for variable SAVE.")
 end
 
-here = fileparts(mfilename('fullpath'));
 visi = 'on';
 PTS_DIM = 250;
 
@@ -41,12 +42,14 @@ for m = 1:size(name_list,2)
 
         for T = AX
 
-
             warning('off','all')
 
-            filename = fullfile(here, '../../data/results/design', sprintf('doe_%s_%s_%d.csv', name, prm.name, it));
-            filename_para = fullfile(here, '../../data/results/param', sprintf('param_%s_1_%s_%d.csv', name, prm.name, it));
-            filename_cov = fullfile(here, '../../data/results/param', sprintf('cov_%s_1_%s_%d.csv', name, prm.name, it));
+            filename = fullfile (data_dir, 'results', 'design', ...
+                sprintf ('doe_%s_%s_%d.csv', name, prm.name, it));
+            filename_para = fullfile (data_dir, 'results', 'param', ...
+                sprintf ('param_%s_1_%s_%d.csv', name, prm.name, it));
+            filename_cov = fullfile (data_dir, 'results', 'param', ...
+                sprintf ('cov_%s_1_%s_%d.csv', name, prm.name, it));
 
             file = readmatrix(filename);
             file_para = readmatrix(filename_para);
