@@ -63,7 +63,7 @@ for m = 1:size(name_list,2)
             set = get_expected_quantile_set(Model,df,PTS_DIM, PTS_DIM,file(1:config.pts_init+T,:),f(file(1:config.pts_init+T,:)),prm.const,prm.alpha);
 
             f1 = figure('Position', [10 10 wid hei], 'visible', visi, 'Renderer','painters');
-            %set(gcf,'renderer','Painters')
+            hold on
             p = pcolor(double(xf), double(sf)', reshape(f(df), PTS_DIM, PTS_DIM)');
             p.EdgeColor = 'none';
 
