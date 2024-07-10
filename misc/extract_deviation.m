@@ -1,10 +1,18 @@
 % Allow to extract and save statistics on the algorithms given a list_id of
 % runs.
 %
-% Name should be the identifier of the method in the corresponding file
-% names. For example, for a QSI-SUR (misclassification-based) : QSI_m
-%
 % it designates the numerical id of the run.
+% 
+% Name should be the identifier of the method in the corresponding file
+% names. The identifiers are as follows:
+%
+% QSI-SUR: "QSI_m", "QSI_v", "QSI_e" (depending on the version of the
+% criterion).
+% Joint-SUR: "joint_m", "joint_v", "joint_e" (depending on the version of
+% the criterion).
+% Ranjan: "Ranjan".
+% Max. misclassification: "misclassification".
+% Random: "random".
 
 % Copyright Notice
 %
