@@ -8,6 +8,7 @@ cd (project_root);
 addpath (fullfile (project_root));
 addpath (fullfile (project_root, 'test_functions'));
 addpath (fullfile (project_root, 'misc'));
+addpath (fullfile (project_root, 'examples'));
 addpath (genpath (fullfile (project_root, 'methods' )));
 
 % Download STK 2.8.1 (if needed)
