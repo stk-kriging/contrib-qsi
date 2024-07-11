@@ -30,11 +30,12 @@ if nargin < 5
     data_dir = fullfile (here, '..', 'data');
 end
 
-PTS_X = config.pts_eval_x;
-PTS_S = config.pts_eval_s;
 
 [prm, f, s_trnsf] = funct_struct();
 config = config();
+
+PTS_X = config.pts_eval_x;
+PTS_S = config.pts_eval_s;
 
 dim_tot = prm.dim_x + prm.dim_s;
 
