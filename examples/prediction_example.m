@@ -16,9 +16,11 @@ data_dir = fullfile (here, '../data');
 prm = branin_mod_struct();
 
 % generate DoE init
+disp("Generating initial DoE...")
 generate_doe_init(@branin_mod_struct, @branin_mod_config, it)
 
 % construct sequential design
+disp("Constructing QSI-SUR sequential design...")
 QSI_SUR(@branin_mod_struct, @branin_mod_config, it)
 
 % retrieve design and evaluation results
@@ -52,6 +54,8 @@ s_pred = branin_mod_s_trnsf(s_pred);
 grid = adapt_set(x_pred, s_pred);
 
 % get predicted quantile set
+disp("Predicting quantile set...")
 pred_set = get_expected_quantile_set(Model, grid, 1000, 1000, dn, zn, prm.const, prm.alpha);
 plot(double(x_pred), pred_set)
+title("Indicator of the predicted set")
 xlabel("X")

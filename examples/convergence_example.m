@@ -19,16 +19,23 @@ here = fileparts (mfilename ('fullpath'));
 data_dir = fullfile (here, '../data');
 
 % generate DoE init
+disp("Generating initial DoE...")
 generate_doe_init(@branin_mod_struct, @branin_mod_config, it)
 
 % construct sequential designs
+disp("Constructing QSI-SUR sequential design...")
 QSI_SUR(@branin_mod_struct, @branin_mod_config, it)
+disp("Constructing Joint-SUR sequential design...")
 joint_SUR(@branin_mod_struct, @branin_mod_config, it)
+disp("Constructing Ranjan criterion sequential design...")
 Ranjan(@branin_mod_struct, @branin_mod_config, it)
+disp("Constructing max. misclassification sequential design...")
 misclassification(@branin_mod_struct, @branin_mod_config, it)
+disp("Constructing random design...")
 random(@branin_mod_struct, @branin_mod_config, it)
 
 % extract convergence results
+disp("Calculating proportion of misclassified points for the different strategies at each step...")
 list_algo = ["QSI_m", "joint_m", "Ranjan", "misclassification", "random"];
 for k = 1:5
     algo = list_algo(k);
@@ -40,7 +47,7 @@ figure()
 for k = 1:5
     algo = list_algo(k);
     file_name = sprintf("dev_%s_%s_%d.csv", algo, prm.name, it);
-    file_path = fullfile(data_dir, 'results/deviations', 'file_name');
+    file_path = fullfile(data_dir, 'results/deviations', file_name);
     dev = readmatrix(file_path);
     plot(0:30, dev, "DisplayName", algo)
     hold on
