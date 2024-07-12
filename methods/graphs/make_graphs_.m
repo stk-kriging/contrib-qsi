@@ -5,9 +5,9 @@
 %    Authors: Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr>
 %             Julien Bect <julien.bect@centralesupelec.fr>
 
-function [f1, f2] = make_graphs_ (         ...
-    data_dir, funct_struct, config_func,   ...
-    name_list, name_graphs, id_list, AX, SAVE)
+function make_graphs_ (figs,                  ...
+    data_dir, funct_struct, config_func,      ...
+    name_list, name_graphs, id_list, AX, SAVE )
 
 [prm, f, s_trnsf] = funct_struct();
 config = config_func();
@@ -20,11 +20,7 @@ if (SAVE ~= 0) && (SAVE ~=1)
     error("Invalid value for variable SAVE.")
 end
 
-visi = 'on';
 PTS_DIM = 250;
-
-wid = int64(450);
-hei = int64(0.76*wid);
 
 for m = 1:size(name_list,2)
 
@@ -62,7 +58,9 @@ for m = 1:size(name_list,2)
             Model.lognoisevariance = config.lognugget;
             set = get_expected_quantile_set(Model,df,PTS_DIM, PTS_DIM,file(1:config.pts_init+T,:),f(file(1:config.pts_init+T,:)),prm.const,prm.alpha);
 
-            f1 = figure('Position', [10 10 wid hei], 'visible', visi, 'Renderer','painters');
+            figure (figs(1));
+
+            figure (figs(2));  clf (figs(2));
             hold on
             p = pcolor(double(xf), double(sf)', reshape(f(df), PTS_DIM, PTS_DIM)');
             p.EdgeColor = 'none';
@@ -84,7 +82,7 @@ for m = 1:size(name_list,2)
             hold on
             title(name_graphs(m))
 
-            f2 = figure('Visible',visi,'Position', [10 10 wid hei], 'Renderer','painters');
+            figure (figs(3));  clf (figs(3));
             axis([double(prm.BOXx)', 0, 1])
             hold on
             stairs(double(xf),trueSet,'LineWidth',1,'DisplayName','$c(x)$','Color','black')
@@ -95,6 +93,7 @@ for m = 1:size(name_list,2)
             legend('Location','northwest','Interpreter','latex');
             title(name_graphs(m))
 
+            drawnow ();
         end
 
     end
