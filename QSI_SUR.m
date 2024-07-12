@@ -26,15 +26,8 @@ end
 config = config_func();
 here = fileparts(mfilename('fullpath'));
 
-if DEMO == 1
-    if (prm.dim_x ~= 1) || (prm.dim_s ~= 1)
-        error("Invalid problem dimension for demo")
-    else
-        f1 = figure();
-        f2 = figure();
-        wid = int64(450);
-        hei = int64(0.76*wid);
-    end
+if DEMO == 1 && ((prm.dim_x ~= 1) || (prm.dim_s ~= 1))
+    error("Invalid problem dimension for demo")
 end
 
 if (DEMO ~= 0) && (DEMO ~=1)
@@ -158,12 +151,9 @@ for t = 1:config.T %loop on steps
     for r = 1:config.keep_xs
 
         i = ranking_xs(r);
-
         pt = double(dt(i,:));
-        crit = 0;
 
-
-        %Draw variables, get kriging matrix
+        % Draw variables, get kriging matrix
         var = [];
 
         for m = 1:prm.M
@@ -269,23 +259,37 @@ for t = 1:config.T %loop on steps
 
     if DEMO == 1
 
-        if (mod(t,3) == 0) && (t >= 3)
+        PLOT_PERIOD = 3;
+
+        if (mod (t, PLOT_PERIOD) == 0) && (t >= PLOT_PERIOD)
             fprintf("Generating graphs (%d points)...\n", t);
 
-            if t == 3
-            A = stk_sampling_regulargrid(1000, 1, prm.BOXs);
-            A = sort(double(A));
-            [~, pdf] = s_trnsf(A);    
-            figure('Position', [10 10 1/4*wid hei], 'Renderer','painters')
-            hold on
-            area(A, pdf, 'FaceAlpha',0.2);
-            ylabel("\bfDens. func.")
-            xticks([])
-            camroll(90);
+            if t == PLOT_PERIOD
+
+                h0 = get (0);
+                w = h0.MonitorPositions(3) / 12;
+                h = h0.MonitorPositions(4);
+                y = 0.8 * h;
+
+                figs(1) = figure ('Position', [1.50*w y   w 0.4*h]);
+                figs(2) = figure ('Position', [2.75*w y 4*w 0.4*h]);
+                figs(3) = figure ('Position', [7.00*w y 4*w 0.4*h]);
+
+                A = stk_sampling_regulargrid(1000, 1, prm.BOXs);
+                A = sort(double(A));
+                [~, pdf] = s_trnsf(A);
+
+                figure (figs(1));
+                hold on
+                area(A, pdf, 'FaceAlpha',0.2);
+                ylabel("\bfDens. func.")
+                xticks([])
+                camroll(90);
+                drawnow ();
             end
 
-            [f1, f2] = make_graphs_ (data_dir, funct_struct, config_func, ...
-                ["QSI_"+config.critName], [sprintf("%d steps", t)], it, t, 0);
+            make_graphs_ (figs, data_dir, funct_struct, config_func, ...
+                "QSI_" + config.critName, sprintf("%d steps", t), it, t, 0);
             disp("PAUSED: press any key to continue.")
             pause()
         end
