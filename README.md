@@ -83,9 +83,7 @@ SUR methods tend to be computationaly costly. In particular, the QSI-SUR criteri
 
 ## Acknowledgements
 
-The authors are grateful to Valérie Cayol and Rodolphe Le Riche for
-sharing their R implementation of the Mogi model used for the Volcano
-test case.  This work has been funded by the French National Research
+This work has been funded by the French National Research
 Agency (ANR), in the context of the project SAMOURAI (ANR-20-CE46-0013).
 
 
