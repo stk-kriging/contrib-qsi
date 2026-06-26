@@ -42,7 +42,7 @@
 
 function extract_deviation(funct_struct, config, name, it, data_dir)
 
-disp("Run number "+int2str(it))
+fprintf ('Run number %d\n', it);
 
 if nargin < 5
     here = fileparts (mfilename ('fullpath'));

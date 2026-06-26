@@ -30,7 +30,7 @@
 
 function Ranjan(funct_struct, config, it, data_dir)
 
-disp("Run number "+int2str(it))
+fprintf ('Run number %d\n', it);
 
 if nargin < 4
     here = fileparts (mfilename ('fullpath'));

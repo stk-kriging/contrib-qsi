@@ -30,7 +30,7 @@
 
 function QSI_SUR(funct_struct, config_func, it, data_dir, DEMO)
 
-disp ("Run number " + int2str(it));
+fprintf ('Run number %d\n', it);
 
 if nargin < 4
     here = fileparts (mfilename ('fullpath'));
@@ -308,8 +308,8 @@ for t = 1:config.T %loop on steps
             end
 
             make_graphs_ (figs, data_dir, funct_struct, config_func, ...
-                "QSI_" + config.critName, sprintf("%d steps", t), it, t, 0);
-            disp("PAUSED: press any key to continue.")
+                ['QSI_' config.critName], sprintf ('%d steps', t), it, t, 0);
+            disp ('PAUSED: press any key to continue.')
             pause()
         end
 
