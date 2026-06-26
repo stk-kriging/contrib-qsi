@@ -96,7 +96,7 @@ for j = 1:config.axT:config.T+1
     Model = stk_model ();
 
     for m = 1:prm.M
-        cov = convertStringsToChars(prm.list_cov(file_cov(j,:,m)));
+        cov = prm.list_cov{file_cov(j,:,m)};
         Model(m) = stk_model(cov, dim_tot);
         Model(m).param = para(j,:,m);
     end

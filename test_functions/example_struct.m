@@ -51,7 +51,10 @@ prm.alpha = 0.05; %threshold alpha
 prm.name = "branin_mod"; % name of the function for saving results
 prm.name_sub = ["branin_mod"]; % name of the sub-functions (useful if prm.M > 1)
 
-% list of possible covariances models, implemented in STK
-prm.list_cov = ["stk_expcov_aniso"; "stk_materncov32_aniso"; "stk_materncov52_aniso"; "stk_gausscov_aniso"];
-
+% list of possible covariance models, implemented in STK
+prm.list_cov = {             ...
+    'stk_expcov_aniso';      ...
+    'stk_materncov32_aniso'; ...
+    'stk_materncov52_aniso'; ...
+    'stk_gausscov_aniso'     };
 end

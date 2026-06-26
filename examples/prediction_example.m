@@ -52,7 +52,7 @@ file_name = sprintf("cov_QSI_m_1_branin_mod_%d.csv", it);
 file_path = fullfile(data_dir, 'results/param', file_name);
 cov_number = readmatrix(file_path);
 cov_number = cov_number(31);
-cov = convertStringsToChars(prm.list_cov(cov_number));
+cov = prm.list_cov{cov_number};
 
 % retrieve covariance parameters
 file_name = sprintf("param_QSI_m_1_branin_mod_%d.csv", it);

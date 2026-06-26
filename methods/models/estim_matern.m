@@ -32,9 +32,9 @@ function [model_opt, idx_cov_opt] = ...
 model_opt = [];
 lhood_opt = +inf;
 
-for j = 1:(size (list_cov, 1))
+for j = 1:(length (list_cov))
 
-    model = stk_model (char (list_cov(j)), size (xi, 2));
+    model = stk_model (list_cov{j}, size (xi, 2));
     model.lognoisevariance = lognugget;
     [model.param, ~, info] = stk_param_estim (model, xi, zi);
 

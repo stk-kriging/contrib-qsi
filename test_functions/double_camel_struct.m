@@ -47,7 +47,12 @@ prm.alpha = 0.15;
 prm.name = "double_camel";
 prm.name_sub = ["double_camel"];
 
-prm.list_cov = ["stk_expcov_aniso"; "stk_materncov32_aniso"; "stk_materncov52_aniso"; "stk_gausscov_aniso"];
+prm.list_cov = {             ...
+    'stk_expcov_aniso';      ...
+    'stk_materncov32_aniso'; ...
+    'stk_materncov52_aniso'; ...
+    'stk_gausscov_aniso'     };
+
 prm.eps = 1/200;
 
 end
