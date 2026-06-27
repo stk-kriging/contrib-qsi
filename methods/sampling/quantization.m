@@ -104,6 +104,7 @@ if isempty(Qprev) || (Qprev~=Q)
     z = roots(x(Q+1,:));
 
     %Coeficients
+    w = zeros(1,Q); % reallocate to clear tail from a previous larger Q
     for i=1:Q
         w(i)=(2.^(Q-1)*(factorial(Q)).*sqrt(pi))./(Q.^2.*(polyval(x(Q,1:Q),z(i))).^2);
     end
@@ -115,3 +116,4 @@ zOut = m + s*z*sqrt(2);
 wOut = w./sqrt(pi);
 
 end
+
