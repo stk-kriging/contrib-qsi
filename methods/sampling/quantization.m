@@ -50,39 +50,39 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with contrib-qsi.  If not, see <http://www.gnu.org/licenses/>.
 
-function [z,w] = quantization( m, s, tmp )
+function [z, w] = quantization (m, s, tmp)
 
-if isnumeric(tmp), % syntax 1
+if isnumeric (tmp)  % syntax 1
     Q = tmp;
     useGH = 0;
-elseif isstruct(tmp) % syntax 2
+elseif isstruct (tmp)  % syntax 2
     Q = tmp.nbLevels;
     useGH = tmp.useGaussHermite;
 else
-    error('Incorrect type for argument #3');
+    error ('Incorrect type for argument #3');
 end
 
-switch useGH,
-    case 0,
-        [z,w] = get_EquiProb_quantization( m, s, Q );
-    case 1,
-        [z,w] = get_GaussHermite_quantization( m, s, Q );
-    otherwise,
-        error('Incorrect value for opts.useGaussHermite');
+switch useGH
+    case 0
+        [z, w] = get_EquiProb_quantization (m, s, Q);
+    case 1
+        [z, w] = get_GaussHermite_quantization (m, s, Q);
+    otherwise
+        error ('Incorrect value for opts.useGaussHermite');
 end
 
-end
+end % function
 
 
 %% get_EquiProb_quantization
 
-function [zOut,wOut] = get_EquiProb_quantization( m, s, Q )
+function [zOut, wOut] = get_EquiProb_quantization (m, s, Q)
 
 persistent w z Qprev
 
-if isempty(Qprev) || (Qprev~=Q)
-    w = 1/Q * ones(1,Q);
-    z = norminv( (2*(1:Q)-1)/(2*Q)  );
+if (isempty (Qprev)) || (Qprev ~= Q)
+    w = 1/Q * (ones (1, Q));
+    z = norminv ((2*(1:Q) - 1) / (2*Q));
     Qprev = Q;
 end
 
@@ -94,26 +94,22 @@ end
 
 %% get_GaussHermite_quantization
 
-function [zOut,wOut] = get_GaussHermite_quantization( m, s, Q )
+function [zOut, wOut] = get_GaussHermite_quantization (m, s, Q)
 
 persistent w z Qprev
 
-if isempty(Qprev) || (Qprev~=Q)
+if (isempty (Qprev)) || (Qprev ~= Q)
     x = hermipol(Q);
-    %Roots
-    z = roots(x(Q+1,:));
-
-    %Coeficients
-    w = zeros(1,Q); % reallocate to clear tail from a previous larger Q
-    for i=1:Q
-        w(i)=(2.^(Q-1)*(factorial(Q)).*sqrt(pi))./(Q.^2.*(polyval(x(Q,1:Q),z(i))).^2);
+    z = roots(x(Q+1,:));  % quadrature points
+    w = zeros(1,Q);       % quadrature weights
+    for i = 1:Q
+        w(i) = (2.^(Q - 1) * (factorial (Q)) .* (sqrt (pi))) ...
+            ./ (Q.^2 .* (polyval (x(Q,1:Q), z(i))).^2);
     end
-
     Qprev = Q;
 end
 
 zOut = m + s*z*sqrt(2);
-wOut = w./sqrt(pi);
+wOut = w ./ sqrt(pi);
 
-end
-
+end % function
