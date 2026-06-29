@@ -1,37 +1,37 @@
-% syntax 1: [z,w] = quantization( m, s, Q )
-% syntax 2: [z,w] = quantization( m, s, opts )
+% syntax 1:  [z, w] = quantization (m, s, Q)
+% syntax 2:  [z, w] = quantization (m, s, opts)
 %
 % inputs
 % ======
 %
-% m = mean
-% s = standard deviation
+%   m = mean
+%   s = standard deviation
 %
 % syntax 1:
 %
-%     Q = number of quantization levels
+%   Q = number of quantization levels
 %
 % syntax 2:
 %
-%     opts.useGaussHermite = 0 --> constant weights (same as syntax 1)
-%     opts.useGaussHermite = 1 --> Gauss-Hermite quadrature
-%     opts.nbLevels            --> number of quantization levels
-%
+%   opts.useGaussHermite = 0 --> constant weights (same as syntax 1)
+%   opts.useGaussHermite = 1 --> Gauss-Hermite quadrature
+%   opts.nbLevels            --> number of quantization levels
 %
 % output
 % ======
 %
-% z = vector of evaluation points
-% w = vector of weights
+%   z = vector of evaluation points
+%   w = vector of weights
 %
-% Both z and w are of size 1 x opts.nbLevels
+%   Both z and w are of size 1 x opts.nbLevels
 %
 
 % Copyright Notice
 %
-%    Copyright (C) 2024 CentraleSupelec
+%    Copyright (C) 2024, 2026 CentraleSupelec
 %
-%    Author(s): Julien Bect <julien.bect@centralesupelec.fr>
+%    Author(s):  Julien Bect  <julien.bect@centralesupelec.fr>
+%                Romain Ait Abdelmalek-Lomenech  <romain.ait@centralesupelec.fr>
 
 % Copying Permission Statement
 %
