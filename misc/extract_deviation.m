@@ -16,7 +16,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2024 CentraleSupelec
+%    Copyright (C) 2024, 2026 CentraleSupelec
 %
 %    Author(s): Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr>
 %               Julien Bect <julien.bect@centralesupelec.fr>
@@ -51,7 +51,6 @@ end
 
 
 [prm, f, s_trnsf] = funct_struct();
-config = config();
 
 PTS_X = config.pts_eval_x;
 PTS_S = config.pts_eval_s;

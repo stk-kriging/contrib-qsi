@@ -23,11 +23,10 @@
 %    along with contrib-qsi.  If not, see <http://www.gnu.org/licenses/>.
 
 function make_graphs_ (figs,                  ...
-    data_dir, funct_struct, config_func,      ...
+    data_dir, funct_struct, config,           ...
     name_list, name_graphs, id_list, AX, SAVE )
 
 [prm, f, s_trnsf] = funct_struct();
-config = config_func();
 
 if nargin < 7
     SAVE = 0;

@@ -1,10 +1,10 @@
-% Usage: QSI_SUR(@funct_struct, @config, list_id, data_dir, DEMO)
+% Usage: QSI_SUR (@funct_struct, config, list_id, data_dir, DEMO)
 % Compute sequential DoE using QSI criterion
 % DoE and models parameters are save in data/results
 
 % Copyright Notice
 %
-%    Copyright (C) 2024 CentraleSupelec
+%    Copyright (C) 2024, 2026 CentraleSupelec
 %
 %    Author(s): Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr>
 %               Julien Bect <julien.bect@centralesupelec.fr>
@@ -26,9 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with contrib-qsi.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
-function QSI_SUR(funct_struct, config_func, it, data_dir, DEMO)
+function QSI_SUR (funct_struct, config, it, data_dir, DEMO)
 
 fprintf ('Run number %d\n', it);
 
@@ -42,7 +40,6 @@ if nargin < 5
 end
 
 [prm, f, s_trnsf] = funct_struct(); %loading function and parameters
-config = config_func();
 here = fileparts(mfilename('fullpath'));
 
 if DEMO == 1 && ((prm.dim_x ~= 1) || (prm.dim_s ~= 1))
@@ -307,7 +304,7 @@ for t = 1:config.T %loop on steps
                 drawnow ();
             end
 
-            make_graphs_ (figs, data_dir, funct_struct, config_func, ...
+            make_graphs_ (figs, data_dir, funct_struct, config, ...
                 ['QSI_' config.critName], sprintf ('%d steps', t), it, t, 0);
             disp ('PAUSED: press any key to continue.')
             pause()

@@ -8,7 +8,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2024 CentraleSupelec
+%    Copyright (C) 2024, 2026 CentraleSupelec
 %
 %    Author(s): Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr>
 
@@ -29,35 +29,36 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with contrib-qsi.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
 it = -1;
 
 here = fileparts (mfilename ('fullpath'));
 data_dir = fullfile (here, '../data');
 
+funct_struct = @branin_mod_struct;
+config = branin_mod_config ();
+
 % generate DoE init
 disp("Generating initial DoE...")
-generate_doe_init(@branin_mod_struct, @branin_mod_config, it)
+generate_doe_init (funct_struct, config, it);
 
 % construct sequential designs
 disp("Constructing QSI-SUR sequential design...")
-QSI_SUR(@branin_mod_struct, @branin_mod_config, it)
+QSI_SUR (funct_struct, config, it);
 disp("Constructing Joint-SUR sequential design...")
-joint_SUR(@branin_mod_struct, @branin_mod_config, it)
+joint_SUR (funct_struct, config, it);
 disp("Constructing Ranjan criterion sequential design...")
-Ranjan(@branin_mod_struct, @branin_mod_config, it)
+Ranjan (funct_struct, config, it);
 disp("Constructing max. misclassification sequential design...")
-misclassification(@branin_mod_struct, @branin_mod_config, it)
+misclassification (funct_struct, config, it);
 disp("Constructing random design...")
-random(@branin_mod_struct, @branin_mod_config, it)
+random (funct_struct, config, it);
 
 % extract convergence results
 disp("Calculating proportion of misclassified points for the different strategies at each step...")
 list_algo = ["QSI_m", "joint_m", "Ranjan", "misclassification", "random"];
 for k = 1:5
     algo = list_algo(k);
-    extract_deviation(@branin_mod_struct, @branin_mod_config, algo, it)
+    extract_deviation (funct_struct, config, algo, it);
 end
 
 % plot results

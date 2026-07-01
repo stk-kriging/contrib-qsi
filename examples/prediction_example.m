@@ -3,7 +3,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2024 CentraleSupelec
+%    Copyright (C) 2024, 2026 CentraleSupelec
 %
 %    Author(s): Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr>
 
@@ -24,22 +24,24 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with contrib-qsi.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
 it = -1;
 
 here = fileparts (mfilename ('fullpath'));
 data_dir = fullfile (here, '../data');
 
-prm = branin_mod_struct();
+% FIXME: Changing the next two line is NOT enough to switch to another example
+funct_struct = @branin_mod_struct;
+config = branin_mod_config ();
+
+prm = funct_struct ();
 
 % generate DoE init
 disp("Generating initial DoE...")
-generate_doe_init(@branin_mod_struct, @branin_mod_config, it)
+generate_doe_init(@funct_struct, config, it)
 
 % construct sequential design
 disp("Constructing QSI-SUR sequential design...")
-QSI_SUR(@branin_mod_struct, @branin_mod_config, it)
+QSI_SUR(@funct_struct, config, it)
 
 % retrieve design and evaluation results
 file_name = sprintf("doe_QSI_m_branin_mod_%d.csv", it);

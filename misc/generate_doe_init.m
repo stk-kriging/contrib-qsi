@@ -1,4 +1,4 @@
-%Usage: generate_grid(@funct_struct, @config, list_id)
+%Usage: generate_grid(@funct_struct, config, list_id)
 % Generate initial design for experiments on a given function, for a list
 % of identifiers.
 %Initial designs are saved in /data/doe_init.
@@ -32,7 +32,6 @@
 function generate_doe_init(funct_struct, config, list_id, data_dir)
 
 [prm, ~, s_trnsf] = funct_struct();
-config = config();
 
 if nargin < 4
     here = fileparts (mfilename ('fullpath'));

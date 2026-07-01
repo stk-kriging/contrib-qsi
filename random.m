@@ -1,10 +1,10 @@
-% Usage: random (@funct_struct, @config, list_id, data_dir)
+% Usage: random (@funct_struct, config, list_id, data_dir)
 % Random DoE
 % DoE and models parameters are save in data/results
 
 % Copyright Notice
 %
-%    Copyright (C) 2024 CentraleSupelec
+%    Copyright (C) 2024, 2026 CentraleSupelec
 %
 %    Author(s): Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr>
 %               Julien Bect <julien.bect@centralesupelec.fr>
@@ -38,7 +38,6 @@ if nargin < 4
 end
 
 [prm, f, s_trnsf] = funct_struct();
-config = config();
 here = fileparts(mfilename('fullpath'));
 
 dim_tot = prm.dim_x+prm.dim_s;

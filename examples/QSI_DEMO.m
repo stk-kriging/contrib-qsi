@@ -37,21 +37,20 @@ DEMO = 1;
 ID = -1;
 
 funct_struct = @branin_mod_struct;
-funct_config = @branin_mod_config;
+config = branin_mod_config ();
 
 warning 'off'
 here = fileparts (mfilename ('fullpath')); %local path
 data_dir = fullfile (here, '..', 'data');
 
 prm = funct_struct (); %call to function parameters to check for error in dimension for demo
-config = funct_config ();
 
 if (prm.dim_x ~= 1) || (prm.dim_s ~= 1)
     error("Invalid problem dimension")
 end
 
-generate_doe_init (funct_struct, funct_config, ID, data_dir);
-QSI_SUR (funct_struct, funct_config, ID, data_dir, DEMO);
+generate_doe_init (funct_struct, config, ID, data_dir);
+QSI_SUR (funct_struct, config, ID, data_dir, DEMO);
 
 %Deleting saved datas
 filename = sprintf ('doe_init_%s_init_%d.csv', prm.name, ID); %delete grid
