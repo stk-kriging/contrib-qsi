@@ -101,4 +101,4 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the license for more details.
 
 You should have received a copy of the license along with the software
-(see [COPYING.md](./COPYING.md)).  If not, see <http://www.gnu.org/licenses/>.
+(see [LICENSE.md](./LICENSE.md)).  If not, see <http://www.gnu.org/licenses/>.
