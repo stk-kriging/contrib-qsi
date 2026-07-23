@@ -13,13 +13,16 @@
 % Ranjan: "Ranjan".
 % Max. misclassification: "misclassification".
 % Random: "random".
+%
+% Optional argument mean_plugin allows to use the plug-in estimator of the
+% quantile set instead of the expected set.
 
 % Copyright Notice
 %
 %    Copyright (C) 2024, 2026 CentraleSupelec
 %
-%    Author(s): Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr>
-%               Julien Bect <julien.bect@centralesupelec.fr>
+%    Authors:  Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr>
+%              Julien Bect <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -38,9 +41,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with contrib-qsi.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
-function extract_deviation(funct_struct, config, name, it, data_dir)
+function extract_deviation ...
+    (funct_struct, config, name, it, data_dir, mean_plugin)
 
 fprintf ('Run number %d\n', it);
 
@@ -49,6 +51,9 @@ if nargin < 5
     data_dir = fullfile (here, '..', 'data');
 end
 
+if nargin < 6
+    mean_plugin = false;
+end
 
 [prm, f, s_trnsf] = funct_struct();
 
@@ -80,7 +85,7 @@ design = readmatrix(fullfile(data_dir, 'results/design', file_design));
 para = zeros(config.T+1, dim_tot+1, prm.M);
 file_cov = zeros(config.T+1,1,prm.M);
 
-for m =1:prm.M
+for m = 1:prm.M
     filename_para = sprintf('param_%s_%d_%s_%d.csv', name, m, prm.name, it);
     para(:,:,m) = readmatrix(fullfile(data_dir, 'results/param/', filename_para));
     filename_cov = sprintf('cov_%s_%d_%s_%d.csv', name, m, prm.name, it);
@@ -100,7 +105,15 @@ for j = 1:config.axT:config.T+1
         Model(m).param = para(j,:,m);
     end
 
-    approxSet = get_expected_quantile_set(Model,df,PTS_X, PTS_S,dt,zt,prm.const,prm.alpha);
+    if mean_plugin
+        zp = stk_predict (Model, dt, zt, df);
+        approxSet = get_true_quantile_set ...
+            (zp.mean, PTS_X, PTS_S, prm.alpha, prm.const);
+    else
+        approxSet = get_expected_quantile_set ...
+            (Model, df, PTS_X, PTS_S, dt, zt, prm.const, prm.alpha);
+    end
+        
     dev = [dev, lebesgue_deviation(trueSet,approxSet)];
 
 end
@@ -108,4 +121,4 @@ end
 filename_dev = sprintf('dev_%s_%s_%d.csv', name, prm.name, it);
 writematrix(dev,fullfile(data_dir, 'results/deviations', filename_dev));
 
-end
+end % function
