@@ -1,9 +1,9 @@
 % Copyright Notice
 %
-%    Copyright (C) 2024 CentraleSupelec
+%    Copyright (C) 2024, 2026 CentraleSupelec
 %
-%    Author(s):  Julien Bect  <julien.bect@centralesupelec.fr>
-%                Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr>
+%    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
+%              Romain Ait Abdelmalek-Lomenech <romain.ait@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -22,8 +22,6 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with contrib-qsi.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
 function startup ()
 
 % Locate project root
@@ -32,9 +30,9 @@ cd (project_root);
 
 % Add directories to the path
 addpath (fullfile (project_root));
-addpath (fullfile (project_root, 'test_functions'));
 addpath (fullfile (project_root, 'misc'));
 addpath (fullfile (project_root, 'examples'));
+addpath (genpath (fullfile (project_root, 'test_cases')));
 addpath (genpath (fullfile (project_root, 'methods' )));
 
 % Download STK 2.8.1 (if needed)
