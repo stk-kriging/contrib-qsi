@@ -42,6 +42,11 @@ if ~ exist (stk_dir, 'dir')
         'https://github.com/stk-kriging/stk.git', '2.8.1');
 end
 
+% Load statistics package if using Octave
+if exist ('OCTAVE_VERSION', 'builtin') == 5
+    pkg load statistics
+end
+
 % Initialize STK
 run (fullfile (stk_dir, 'stk_init.m'));
 
