@@ -1,106 +1,110 @@
-% Visualize the "brann_mod" test case
+% Visualize the "branin_mod" test case
 
-close all;  figure1_timer = tic ();
+[prm, f, s_trnsf] = branin_mod_struct ();
 
-here = fileparts (mfilename ('fullpath'));
-
-[prm, f, s_trnsf] = branin_mod_struct();
-
-pts_x = 500;
-pts_s = 500;
-
-xf = stk_sampling_regulargrid(pts_x, 1, prm.BOXx);
-x = double(xf);
-x = x(:);
+PTS_X = 500;
+PTS_S = 500;
 
 fig = figure ();
-set(fig, 'paperpositionmode', 'auto');
-set(fig, 'position', [100, 100, 1200, 420]);
+set (fig, 'position', [100, 100, 1200, 420]);
 
-% Left panel: density of the uncertain input.
-subplot (4, 7, [1 8 15]);
-hold on;
-a = (0:0.01:15)';
-[~, pdf_s] = branin_mod_s_trnsf (a);
-pdf_s = pdf_s(:);
-patch ([zeros(size(pdf_s)); flipud(pdf_s)], [a; flipud(a)], ...
+label_opts = {'FontSize', 12};
+Gamma_opts = {'LineWidth', 4, 'color', 'green'};
+
+
+%% Left panel: density of the uncertain input
+
+h1 = subplot (4, 7, [1 8 15]);
+
+aa = (0:0.01:15)';
+[~, pdf_s] = branin_mod_s_trnsf (aa);
+
+patch ([zeros(size(pdf_s)); flipud(pdf_s)], [aa; flipud(aa)], ...
     [0.7 0.85 0.95], 'EdgeColor', 'none', 'FaceAlpha', 0.5);
-plot(pdf_s, a, 'black', 'LineWidth', 1);
-xlabel ('density');
+
+hold on;  plot (pdf_s, aa, 'black', 'LineWidth', 1);
+
+xlabel ('density', label_opts{:});
+ylabel ('s', label_opts{:});
 xlim ([0, 1.05 * max(pdf_s)]);
 ylim ([0, 15]);
 xticks ([0 0.1 0.2]);
 yticks (0:2:14);
 hold off;
 
-% Right panel: indicator of Gamma(f), probability curve and alpha.
-sf = stk_sampling_sobol(pts_s, prm.dim_s, prm.BOXs);
-sf = s_trnsf(sf);
-sf = sort(sf);
-df = double(adapt_set(xf, sf));
-zf = f(df);
 
-subplot(4, 7, [5 6 7 12 13 14 19 20 21]);
+%% Right panel: indicator of Gamma(f), probability curve and alpha
+
+h3 = subplot (4, 7, [5 6 7 12 13 14 19 20 21]);
+
+xf = double (stk_sampling_regulargrid (PTS_X, 1, prm.BOXx));
+sf = stk_sampling_sobol (PTS_S, prm.dim_s, prm.BOXs);
+sf = s_trnsf (sf);
+sf = sort (sf);
+df = double (adapt_set (xf, sf));
+zf = f (df);
+
 [qsi_set, proba] = get_true_quantile_set ...
-    (zf, pts_x, pts_s, prm.alpha, prm.const);
+    (zf, PTS_X, PTS_S, prm.alpha, prm.const);
 
-stairs(x, double(qsi_set(:)), ...
-    'LineWidth', 4, 'color', 'green', 'DisplayName', '  indicator');
-hold on;
-plot(x, double(proba(:)), ...
-    'LineWidth', 4, 'color', 'black', 'DisplayName', '  proba');
-plot(x, prm.alpha * ones(size(x)), ...
-    'LineWidth', 3, 'color', 'blue', 'DisplayName', '  alpha');
-xlabel('X');
-legend('Location', 'northwest');
-hold off;
+stairs (xf, double (qsi_set(:)), Gamma_opts{:});
+hold on
+plot (xf, double (proba(:)), 'LineWidth', 4, 'color', 'black');
+plot (xf, prm.alpha * ones (size (xf)), 'LineWidth', 3, 'color', 'blue');
 
-% Middle panel: function, boundary of f^{-1}(C), and Gamma(f).
-ax_middle = subplot(4, 7, [2 3 4 9 10 11 16 17 18]);
-sf_regular = stk_sampling_regulargrid(pts_s, prm.dim_s, prm.BOXs);
-s_regular = double(sf_regular);
-s_regular = s_regular(:);
-df_regular = adapt_set(xf, sf_regular);
-zf_regular = f(df_regular);
-z_grid = reshape(zf_regular, pts_x, pts_s)';
-c_grid = double(reshape((zf_regular <= prm.const(2, 1)), pts_x, pts_s)');
+xlabel ('x', label_opts{:});
+legend (' 1(Gamma)', ' probability', ' alpha', 'Location', 'northwest');
+hold off
 
-hold on;
-contour(x, s_regular, c_grid, [1 1], ...
-    'black', 'LineWidth', 2, 'DisplayName', '  boundaryboundaryboundary');
-xlabel('X');
-ylabel('S');
 
-p = pcolor(x, s_regular, z_grid);
-set(p, 'EdgeColor', 'none');
-contour(x, s_regular, c_grid, [1 1], ...
-    'black', 'LineWidth', 4);
+%% Middle panel: function, boundary of f^{-1}(C), and Gamma(f)
 
-h_colorbar = colorbar('eastoutside');
-ax_pos = get(ax_middle, 'position');
-cb_pos = get(h_colorbar, 'position');
-cb_pos(1) = ax_pos(1) + ax_pos(3) + 0.005;
-cb_pos(3) = min(cb_pos(3), 0.015);
-set(h_colorbar, 'position', cb_pos);
-axes(ax_middle);
+h2 = subplot (4, 7, [2 3 4 9 10 11 16 17 18]);
 
-sf = stk_sampling_sobol(pts_s, prm.dim_s, prm.BOXs);
-sf = s_trnsf(sf);
-sf = sort(sf);
-df = double(adapt_set(xf, sf));
-[qsi_set, ~] = get_true_quantile_set ...
-    (f(df), pts_x, pts_s, prm.alpha, prm.const);
-abs_quantile = nan(size(x));
+sf = double (stk_sampling_regulargrid (PTS_S, prm.dim_s, prm.BOXs));
+df = adapt_set (xf, sf);
+zf = f (df);
+
+z_grid = reshape (zf, PTS_X, PTS_S)';
+c_grid = reshape (double (zf <= prm.const(2, 1)), PTS_X, PTS_S)';
+
+p = pcolor (xf, sf, z_grid);
+set (p, 'EdgeColor', 'none');
+hold on
+
+contour (xf, sf, c_grid, [1 1], 'black', 'LineWidth', 4);
+h_boundary = plot (nan, nan, 'Color', 'black', 'LineWidth', 4); % trick (looks better in Octave?)
+ 
+h_cb = colorbar ('eastoutside');
+if exist ('OCTAVE_VERSION', 'builtin') == 5
+    ax_pos = get (h2, 'position');
+    cb_pos = get (h_cb, 'position');
+    cb_pos(1) = ax_pos(1) + ax_pos(3) + 0.005;
+    set (h_cb, 'position', cb_pos);
+end
+
+sf = double (stk_sampling_sobol (PTS_S, prm.dim_s, prm.BOXs));
+sf = s_trnsf (sf);
+sf = sort (sf);
+df = double (adapt_set (xf, sf));
+qsi_set = get_true_quantile_set (f(df), PTS_X, PTS_S, prm.alpha, prm.const);
+
+abs_quantile = nan (size (xf));
 abs_quantile(qsi_set(:) == 1) = 0;
-plot(x, abs_quantile, ...
-    'Color', 'green', 'LineWidth', 4, 'DisplayName', '  Gamma');
-h_boundary = plot(nan, nan, 'black', 'LineWidth', 4);
-h_gamma = plot(nan, nan, 'green', 'LineWidth', 4);
-legend([h_boundary, h_gamma], ...
-    {'  boundaryboundaryboundary', '  Gamma'}, 'Location', 'southwest');
-hold off;
+h_gamma = plot (xf, abs_quantile, Gamma_opts{:});
 
-fprintf ('Generation of Figure 1: Done in %.2f s\n', toc (figure1_timer));
+legend ([h_boundary, h_gamma], ...
+    {' boundary', ' Gamma'}, 'Location', 'southwest');
+
+xlabel ('x', label_opts{:});  hold off
+
+
+%% Save figure
+
+here = fileparts (mfilename ('fullpath'));
+
+% Printed/saved figure size should match the displayed figure size
+set (fig, 'paperpositionmode', 'auto');
 
 print (fig, '-dpng', '-r180', fullfile (here, 'branin_mod.png'));
 print (fig, '-depsc2', fullfile (here, 'branin_mod.eps'));
